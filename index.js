@@ -10,7 +10,7 @@ const app = express();
 // Middlewares
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173", "https://flamehash-it-client.vercel.app"],
     credentials: true,
   }),
 );
