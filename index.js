@@ -36,9 +36,9 @@ const client = new MongoClient(uri, {
 });
 
 // DB & collections
-const database = client.db("flamehashitDB");
-const servicesCollection = database.collection("servicesCollection");
-const contactsCollection = database.collection("contactsCollection");
+const database = client.db("flameHashItDB");
+const servicesCollection = database.collection("servicesColl");
+const contactsCollection = database.collection("contactsColl");
 
 // Basic route
 app.get("/", (req, res) => {
