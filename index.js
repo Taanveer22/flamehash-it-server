@@ -70,7 +70,7 @@ function escapeHtml(value = "") {
 }
 
 // db & collections
-const database = client.db("flamehashItDB");
+const database = client.db("flameHashItDB");
 const servicesCollection = database.collection("servicesColl");
 const contactsCollection = database.collection("contactsColl");
 
@@ -128,81 +128,90 @@ app.post("/services", async (req, res) => {
       // Send confirmation email to customer
       // ------------------------------------------------------
 
-      await resend.emails.send({
-        from: CLIENT_EMAIL,
-        to: email,
+      const { data: customerData, error: customerError } =
+        await resend.emails.send({
+          from: CLIENT_EMAIL,
+          to: email,
 
-        subject: "We received your service request!",
+          subject: "We received your service request!",
 
-        html: `
-          <h2>Hi ${safeName},</h2>
+          html: `
+            <h2>Hi ${safeName},</h2>
 
-          <p>
-            Thanks for booking
-            <b>${safeService}</b>
-            with FlameHashit!
-          </p>
+            <p>
+              Thanks for booking
+              <b>${safeService}</b>
+              with FlameHashit!
+            </p>
 
-          <p>
-            <b>Your message:</b>
-            ${safeMessage}
-          </p>
+            <p>
+              <b>Your message:</b>
+              ${safeMessage}
+            </p>
 
-          <p>
-            We'll get back to you soon.
-          </p>
-        `,
-      });
+            <p>
+              We'll get back to you soon.
+            </p>
+          `,
+        });
+
+      if (customerError) {
+        console.log("CUSTOMER SERVICE EMAIL FAILED:", customerError);
+      } else {
+        console.log("CUSTOMER SERVICE EMAIL SENT:", customerData);
+      }
 
       // ------------------------------------------------------
       // Send notification email to owner
       // ------------------------------------------------------
 
-      await resend.emails.send({
+      const { data: ownerData, error: ownerError } = await resend.emails.send({
         from: CLIENT_EMAIL,
         to: OWNER_EMAIL,
 
-        // Important:
-        // Clicking "Reply" in your email will reply
-        // directly to the customer's email.
+        // Clicking "Reply" will reply directly
+        // to the customer's email.
         replyTo: email,
 
         subject: `New Service Request: ${safeService}`,
 
         html: `
-          <h2>New Service Booking</h2>
+            <h2>New Service Booking</h2>
 
-          <p>
-            <b>Name:</b>
-            ${safeName}
-          </p>
+            <p>
+              <b>Name:</b>
+              ${safeName}
+            </p>
 
-          <p>
-            <b>Email:</b>
-            ${safeEmail}
-          </p>
+            <p>
+              <b>Email:</b>
+              ${safeEmail}
+            </p>
 
-          <p>
-            <b>Mobile:</b>
-            ${safeMobile}
-          </p>
+            <p>
+              <b>Mobile:</b>
+              ${safeMobile}
+            </p>
 
-          <p>
-            <b>Service:</b>
-            ${safeService}
-          </p>
+            <p>
+              <b>Service:</b>
+              ${safeService}
+            </p>
 
-          <p>
-            <b>Message:</b>
-            ${safeMessage}
-          </p>
-        `,
+            <p>
+              <b>Message:</b>
+              ${safeMessage}
+            </p>
+          `,
       });
-    } catch (emailError) {
-      console.log("Email sending failed:", emailError.message);
 
-      // We don't fail the whole request
-      // just because email failed.
+      if (ownerError) {
+        console.log("OWNER SERVICE EMAIL FAILED:", ownerError);
+      } else {
+        console.log("OWNER SERVICE EMAIL SENT:", ownerData);
+      }
+    } catch (emailError) {
+      console.log("Service email sending error:", emailError.message);
     }
 
     // --------------------------------------------------------
@@ -267,71 +276,83 @@ app.post("/contacts", async (req, res) => {
       // Send confirmation email to customer
       // ------------------------------------------------------
 
-      await resend.emails.send({
-        from: CLIENT_EMAIL,
-        to: email,
+      const { data: customerData, error: customerError } =
+        await resend.emails.send({
+          from: CLIENT_EMAIL,
+          to: email,
 
-        subject: "We received your message!",
+          subject: "We received your message!",
 
-        html: `
-          <h2>Hi ${safeName},</h2>
+          html: `
+            <h2>Hi ${safeName},</h2>
 
-          <p>
-            Thanks for reaching out to FlameHashit!
-          </p>
+            <p>
+              Thanks for reaching out to FlameHashit!
+            </p>
 
-          <p>
-            <b>Your message:</b>
-            ${safeMessage}
-          </p>
+            <p>
+              <b>Your message:</b>
+              ${safeMessage}
+            </p>
 
-          <p>
-            We'll get back to you soon.
-          </p>
-        `,
-      });
+            <p>
+              We'll get back to you soon.
+            </p>
+          `,
+        });
+
+      if (customerError) {
+        console.log("CUSTOMER CONTACT EMAIL FAILED:", customerError);
+      } else {
+        console.log("CUSTOMER CONTACT EMAIL SENT:", customerData);
+      }
 
       // ------------------------------------------------------
       // Send notification email to owner
       // ------------------------------------------------------
 
-      await resend.emails.send({
+      const { data: ownerData, error: ownerError } = await resend.emails.send({
         from: CLIENT_EMAIL,
         to: OWNER_EMAIL,
 
-        // Important:
-        // Clicking "Reply" in your email will reply
-        // directly to the customer's email.
+        // Clicking "Reply" will reply directly
+        // to the customer's email.
         replyTo: email,
 
         subject: "New Contact Message",
 
         html: `
-          <h2>New Contact Form Submission</h2>
+            <h2>New Contact Form Submission</h2>
 
-          <p>
-            <b>Name:</b>
-            ${safeName}
-          </p>
+            <p>
+              <b>Name:</b>
+              ${safeName}
+            </p>
 
-          <p>
-            <b>Email:</b>
-            ${safeEmail}
-          </p>
+            <p>
+              <b>Email:</b>
+              ${safeEmail}
+            </p>
 
-          <p>
-            <b>Mobile:</b>
-            ${safeMobile}
-          </p>
+            <p>
+              <b>Mobile:</b>
+              ${safeMobile}
+            </p>
 
-          <p>
-            <b>Message:</b>
-            ${safeMessage}
-          </p>
-        `,
+            <p>
+              <b>Message:</b>
+              ${safeMessage}
+            </p>
+          `,
       });
+
+      if (ownerError) {
+        console.log("OWNER CONTACT EMAIL FAILED:", ownerError);
+      } else {
+        console.log("OWNER CONTACT EMAIL SENT:", ownerData);
+      }
     } catch (emailError) {
-      console.log("Email sending failed:", emailError.message);
+      console.log("Contact email sending error:", emailError.message);
     }
 
     // --------------------------------------------------------
