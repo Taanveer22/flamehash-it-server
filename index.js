@@ -78,7 +78,7 @@ const contactsCollection = database.collection("contactsColl");
 app.get("/", (req, res) => {
   res.json({
     status: "ok",
-    message: "FlameHashit Server",
+    message: "Flamehash it server is running",
   });
 });
 
@@ -380,10 +380,10 @@ async function startServer() {
   try {
     await client.connect();
 
-    console.log("FlameHashit Server Connected with DB");
+    console.log("FlameHash it server connected with database");
 
     app.listen(port, () => {
-      console.log(`FlameHashit Server listening on ${port}`);
+      console.log(`FlameHash it server listening on ${port}`);
     });
   } catch (err) {
     console.log("Server failed to start:", err.message);
